@@ -12,6 +12,7 @@
 </head>
 <body>
         <a href="articles/add/">Создание статьи</a>
+        <a href="game/">Играть</a>
         <h1>Статьи</h1>
         {% for article in articles %}
             <h3>{{ article.title }}</h3> <span>{{ article.status }} - {{ article.get_status_display }}</span>

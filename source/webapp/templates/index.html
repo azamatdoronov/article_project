@@ -14,7 +14,7 @@
         <a href="articles/add/">Создание статьи</a>
         <h1>Статьи</h1>
         {% for article in articles %}
-            <h3>{{ article.title }}</h3>
+            <h3>{{ article.title }}</h3> <span>{{ article.status }} - {{ article.get_status_display }}</span>
             <p><a href="article/?pk={{ article.pk }}">Подробнее</a></p>
         {% endfor %}
 </body>

@@ -8,15 +8,9 @@
     <title>Document</title>
 </head>
 <body>
-<a href="stat/">Статистика</a>
-<p>Guess 4 numbers. Enter them separated with spaces:</p>
-<form method="POST" action="">
-    {% csrf_token %}
-    <input type="text" name="numbers" value="{{ nums }}"/>
-    <input type="submit" value="Send"/>
-</form>
-<h3>{{ result }}</h3>
-
-<p>{{ secret_numbers }}</p>
+<h2>Статистика</h2>
+{% for stat in stat_list %}
+    <p>Ход {{ forloop.counter }} Результат: {{ stat }}</p>
+{% endfor %}
 </body>
 </html>

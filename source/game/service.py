@@ -11,6 +11,7 @@ def generate_numbers(n):
 
 
 class Game:
+    stat_list = []
     secret_numbers = generate_numbers(4)
 
     def __init__(self) -> None:
@@ -41,6 +42,7 @@ class Game:
 
         if bulls == 4:
             Game.secret_numbers = generate_numbers(4)
+            Game.stat_list.clear()
             return WIN_MESSAGE
         elif bulls or cows:
             return RESULT_MESSAGE.format(bulls=bulls, cows=cows)

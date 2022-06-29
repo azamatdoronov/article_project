@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load utils_tags %}
 {% block nav %}
     <li class="nav-item">
         <a class="nav-link" href="{% url "create_article" %}">Создание статьи</a>
@@ -16,17 +17,19 @@
 {% block content %}
 
     <h1 style="display: inline-block">
-        {{ article.title }}
+        {{ article.title|upper }}
     </h1>
     <p style="display: inline-block">
         {{ article.created_at|date:"Y-m-d G:i" }}
-    </p>
+    </p><br>
+    {{ "*"|repeat:40 }}
     <h3>
         {{ article.author }}
     </h3>
     <p>
         {{ article.content }}
     </p>
+    {{ "-"|repeat:80 }}
     <a href="{% url "index" %}">На главную</a>
 
     <div class="modal fade" id="articleDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"

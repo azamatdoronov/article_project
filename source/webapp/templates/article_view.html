@@ -15,12 +15,15 @@
 
 {% block content %}
 
-    <p>
+    <h1 style="display: inline-block">
         {{ article.title }}
+    </h1>
+    <p style="display: inline-block">
+        {{ article.created_at|date:"Y-m-d G:i" }}
     </p>
-    <p>
+    <h3>
         {{ article.author }}
-    </p>
+    </h3>
     <p>
         {{ article.content }}
     </p>

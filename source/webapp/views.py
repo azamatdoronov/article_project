@@ -30,7 +30,8 @@ def create_article(request):
             title = form.cleaned_data.get("title")
             author = form.cleaned_data.get("author")
             content = form.cleaned_data.get("content")
-            new_article = Article.objects.create(title=title, author=author, content=content)
+            status = form.cleaned_data.get("status")
+            new_article = Article.objects.create(title=title, author=author, content=content, status=status)
             return redirect("article_view", pk=new_article.pk)
         return render(request, "create.html", {"form": form})
 
@@ -41,7 +42,8 @@ def update_article(request, pk):
         form = ArticleForm(initial={
             "title": article.title,
             "author": article.author,
-            "content": article.content
+            "content": article.content,
+            "status": article.status
         })
         return render(request, "update.html", {"form": form})
     else:
@@ -50,6 +52,7 @@ def update_article(request, pk):
             article.title = form.cleaned_data.get("title")
             article.author = form.cleaned_data.get("author")
             article.content = form.cleaned_data.get("content")
+            article.status = form.cleaned_data.get("status")
             article.save()
             return redirect("article_view", pk=article.pk)
         return render(request, "update.html", {"form": form})

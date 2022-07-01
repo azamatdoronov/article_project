@@ -27,11 +27,14 @@ def create_article(request):
     else:
         form = ArticleForm(data=request.POST)
         if form.is_valid():
-            title = form.cleaned_data.get("title")
-            author = form.cleaned_data.get("author")
-            content = form.cleaned_data.get("content")
-            status = form.cleaned_data.get("status")
-            new_article = Article.objects.create(title=title, author=author, content=content, status=status)
+            new_article = form.save()
+            # title = form.cleaned_data.get("title")
+            # author = form.cleaned_data.get("author")
+            # content = form.cleaned_data.get("content")
+            # status = form.cleaned_data.get("status")
+            # publish_date = form.cleaned_data.get("publish_date", None)
+            # new_article = Article.objects.create(title=title, author=author, content=content, status=status,
+            #                                      publish_date=publish_date)
             return redirect("article_view", pk=new_article.pk)
         return render(request, "create.html", {"form": form})
 
@@ -43,7 +46,8 @@ def update_article(request, pk):
             "title": article.title,
             "author": article.author,
             "content": article.content,
-            "status": article.status
+            "status": article.status,
+            "publish_date": article.publish_date
         })
         return render(request, "update.html", {"form": form})
     else:
@@ -53,6 +57,7 @@ def update_article(request, pk):
             article.author = form.cleaned_data.get("author")
             article.content = form.cleaned_data.get("content")
             article.status = form.cleaned_data.get("status")
+            article.publish_date = form.cleaned_data.get("publish_date", None)
             article.save()
             return redirect("article_view", pk=article.pk)
         return render(request, "update.html", {"form": form})

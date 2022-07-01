@@ -29,6 +29,9 @@
     <p>
         {{ article.content }}
     </p>
+    <p>
+        {{ article.publish_date|default:"Не указана" }}
+    </p>
     {{ "-"|repeat:80 }}
     <a href="{% url "index" %}">На главную</a>
 

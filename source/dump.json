@@ -7,7 +7,9 @@
         "author": "Unknown",
         "content": "Контент1",
         "created_at": "2022-06-21T13:45:49.487Z",
-        "updated_at": "2022-06-21T13:45:49.487Z"
+        "updated_at": "2022-06-21T13:45:49.487Z",
+        "status": "new",
+        "publish_date": null
     }
 },
 {
@@ -18,7 +20,9 @@
         "author": "Кирилл",
         "content": "Мой контент",
         "created_at": "2022-06-21T13:50:34.766Z",
-        "updated_at": "2022-06-21T13:50:34.766Z"
+        "updated_at": "2022-06-21T13:50:34.766Z",
+        "status": "new",
+        "publish_date": null
     }
 },
 {
@@ -29,18 +33,9 @@
         "author": "Unknown",
         "content": "мывмыввмы",
         "created_at": "2022-06-21T14:21:31.604Z",
-        "updated_at": "2022-06-21T14:21:31.604Z"
-    }
-},
-{
-    "model": "webapp.article",
-    "pk": 4,
-    "fields": {
-        "title": "",
-        "author": "Unknown",
-        "content": "",
-        "created_at": "2022-06-21T14:29:09.544Z",
-        "updated_at": "2022-06-21T14:29:09.544Z"
+        "updated_at": "2022-06-21T14:21:31.604Z",
+        "status": "new",
+        "publish_date": null
     }
 },
 {
@@ -51,7 +46,9 @@
         "author": "Вася",
         "content": "Какойто контент",
         "created_at": "2022-06-21T14:31:18.116Z",
-        "updated_at": "2022-06-21T14:31:18.116Z"
+        "updated_at": "2022-06-21T14:31:18.116Z",
+        "status": "new",
+        "publish_date": null
     }
 },
 {
@@ -62,7 +59,9 @@
         "author": "Unknown",
         "content": "Какойто контент",
         "created_at": "2022-06-21T14:31:51.578Z",
-        "updated_at": "2022-06-21T14:34:31.942Z"
+        "updated_at": "2022-06-21T14:34:31.942Z",
+        "status": "new",
+        "publish_date": null
     }
 },
 {
@@ -73,7 +72,9 @@
         "author": "cssa",
         "content": "",
         "created_at": "2022-06-21T14:36:57.080Z",
-        "updated_at": "2022-06-21T14:37:33.218Z"
+        "updated_at": "2022-06-21T14:37:33.218Z",
+        "status": "new",
+        "publish_date": null
     }
 },
 {
@@ -84,7 +85,9 @@
         "author": "44",
         "content": "444",
         "created_at": "2022-06-21T14:51:04.987Z",
-        "updated_at": "2022-06-21T14:51:04.987Z"
+        "updated_at": "2022-06-21T14:51:04.987Z",
+        "status": "new",
+        "publish_date": null
     }
 },
 {
@@ -95,7 +98,191 @@
         "author": "44",
         "content": "8888",
         "created_at": "2022-06-21T14:51:34.382Z",
-        "updated_at": "2022-06-21T14:51:34.382Z"
+        "updated_at": "2022-06-21T14:51:34.382Z",
+        "status": "new",
+        "publish_date": null
+    }
+},
+{
+    "model": "webapp.article",
+    "pk": 10,
+    "fields": {
+        "title": "mghmg",
+        "author": "bcvbcv",
+        "content": "jftf",
+        "created_at": "2022-06-28T13:54:17.152Z",
+        "updated_at": "2022-06-28T14:39:32.748Z",
+        "status": "new",
+        "publish_date": null
+    }
+},
+{
+    "model": "webapp.article",
+    "pk": 13,
+    "fields": {
+        "title": "1111111111111",
+        "author": "vdsvsd",
+        "content": "csddces",
+        "created_at": "2022-06-28T14:34:56.354Z",
+        "updated_at": "2022-06-28T15:11:15.940Z",
+        "status": "new",
+        "publish_date": null
+    }
+},
+{
+    "model": "webapp.article",
+    "pk": 14,
+    "fields": {
+        "title": "cdscsdsd",
+        "author": "csdcds",
+        "content": "dcds",
+        "created_at": "2022-06-28T15:23:42.785Z",
+        "updated_at": "2022-06-28T15:23:42.785Z",
+        "status": "new",
+        "publish_date": null
+    }
+},
+{
+    "model": "webapp.article",
+    "pk": 15,
+    "fields": {
+        "title": "2222",
+        "author": "2222",
+        "content": "22222",
+        "created_at": "2022-06-29T13:19:21.999Z",
+        "updated_at": "2022-06-29T13:19:48.631Z",
+        "status": "rejected",
+        "publish_date": null
+    }
+},
+{
+    "model": "webapp.article",
+    "pk": 16,
+    "fields": {
+        "title": "test",
+        "author": "test",
+        "content": "test",
+        "created_at": "2022-06-29T14:01:37.187Z",
+        "updated_at": "2022-06-29T14:02:03.497Z",
+        "status": "moderated",
+        "publish_date": "2022-06-21"
+    }
+},
+{
+    "model": "webapp.article",
+    "pk": 17,
+    "fields": {
+        "title": "вмы",
+        "author": "пук",
+        "content": "пкпук",
+        "created_at": "2022-06-29T14:17:10.791Z",
+        "updated_at": "2022-06-29T14:17:10.791Z",
+        "status": "new",
+        "publish_date": null
+    }
+},
+{
+    "model": "webapp.article",
+    "pk": 18,
+    "fields": {
+        "title": "ger",
+        "author": "ger",
+        "content": "gerger",
+        "created_at": "2022-06-29T14:17:17.333Z",
+        "updated_at": "2022-06-29T14:17:17.333Z",
+        "status": "new",
+        "publish_date": null
+    }
+},
+{
+    "model": "webapp.article",
+    "pk": 19,
+    "fields": {
+        "title": "vdf",
+        "author": "vfd",
+        "content": "vdffvd",
+        "created_at": "2022-06-29T14:20:09.498Z",
+        "updated_at": "2022-06-29T14:20:09.498Z",
+        "status": "new",
+        "publish_date": null
+    }
+},
+{
+    "model": "webapp.article",
+    "pk": 20,
+    "fields": {
+        "title": "ffwre",
+        "author": "fwr",
+        "content": "fr",
+        "created_at": "2022-06-29T14:20:27.911Z",
+        "updated_at": "2022-06-29T14:20:27.911Z",
+        "status": "new",
+        "publish_date": null
+    }
+},
+{
+    "model": "webapp.article",
+    "pk": 21,
+    "fields": {
+        "title": "fe",
+        "author": "few",
+        "content": "fe",
+        "created_at": "2022-06-29T14:21:08.331Z",
+        "updated_at": "2022-06-29T14:21:08.331Z",
+        "status": "new",
+        "publish_date": null
+    }
+},
+{
+    "model": "webapp.article",
+    "pk": 22,
+    "fields": {
+        "title": "i",
+        "author": "i",
+        "content": "[",
+        "created_at": "2022-06-29T14:23:21.132Z",
+        "updated_at": "2022-06-29T14:23:21.132Z",
+        "status": "new",
+        "publish_date": null
+    }
+},
+{
+    "model": "webapp.article",
+    "pk": 23,
+    "fields": {
+        "title": "bdf",
+        "author": "fbd",
+        "content": "bfd",
+        "created_at": "2022-06-29T14:24:22.203Z",
+        "updated_at": "2022-06-29T14:24:22.203Z",
+        "status": "new",
+        "publish_date": null
+    }
+},
+{
+    "model": "webapp.article",
+    "pk": 24,
+    "fields": {
+        "title": "4444444444",
+        "author": "Unknown",
+        "content": "55555555555",
+        "created_at": "2022-06-29T14:37:49.418Z",
+        "updated_at": "2022-06-29T14:37:49.418Z",
+        "status": "rejected",
+        "publish_date": "2022-06-30"
+    }
+},
+{
+    "model": "webapp.article",
+    "pk": 25,
+    "fields": {
+        "title": "4444444444",
+        "author": "Unknown",
+        "content": "55555555555",
+        "created_at": "2022-06-29T14:38:11.593Z",
+        "updated_at": "2022-06-29T14:38:11.593Z",
+        "status": "rejected",
+        "publish_date": "2022-06-30"
     }
 }
 ]

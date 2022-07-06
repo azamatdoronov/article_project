@@ -6,6 +6,10 @@
     </li>
 {% endblock %}
 {% block content %}
+    <form action="{% url "index" %}" method="get">
+        {% include "partial/form.html" with button_text="Найти" form=search_form %}
+    </form>
+    <a href="{% url "index" %}">На главную</a>
     <h1>Статьи</h1>
     <div class="row">
         {% for article in articles %}
@@ -19,5 +23,9 @@
             </div>
         {% endfor %}
     </div>
+    <form action="{% url "create_article" %}" method="post">
+        {% csrf_token %}
+        {% include "partial/form.html" with button_text="Создать" form=create_article_form %}
+    </form>
 {% endblock %}
 

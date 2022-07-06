@@ -1,21 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponseNotFound, Http404
-from django.urls import reverse
 
 # Create your views here.
 from django.views import View
 
-from webapp.forms import ArticleForm
+from webapp.forms import ArticleForm, SearchForm
 from webapp.models import Article
-from webapp.validate import article_validate
 from django.views.generic import TemplateView, RedirectView
 
 
 class IndexView(View):
     def get(self, request, *args, **kwargs):
-        articles = Article.objects.order_by("-updated_at")
-        context = {"articles": articles}
-        return render(request, "index.html", context)
+        create_article_form = ArticleForm()
+        return index_view_partial(request, create_article_form)
 
 
 class MyRedirectView(RedirectView):
@@ -25,10 +21,6 @@ class MyRedirectView(RedirectView):
 class ArticleView(TemplateView):
     template_name = "article_view.html"
 
-    # extra_context = {"test": "test"}
-    # def get_template_names(self):
-    #     return "article_view.html"
-
     def get_context_data(self, **kwargs):
         pk = kwargs.get("pk")
         article = get_object_or_404(Article, pk=pk)
@@ -36,38 +28,57 @@ class ArticleView(TemplateView):
         return super().get_context_data(**kwargs)
 
 
+def index_view_partial(request, create_article_form):
+    search_form = SearchForm(data=request.GET)
+    articles = Article.objects.all()
+    if search_form.is_valid():
+        search_value = search_form.cleaned_data.get("search")
+        articles = articles.filter(title__contains=search_value)
+    articles = articles.order_by("-updated_at")
+    context = {"articles": articles, "search_form": search_form, "create_article_form": create_article_form}
+    return render(request, "index.html", context)
+
+
 def create_article(request):
-    if request.method == "GET":
-        form = ArticleForm()
-        return render(request, "create.html", {"form": form})
-    else:
-        form = ArticleForm(data=request.POST)
-        if form.is_valid():
-            title = form.cleaned_data.get("title")
-            author = form.cleaned_data.get("author")
-            content = form.cleaned_data.get("content")
+    if request.method == "POST":
+        create_article_form = ArticleForm(data=request.POST)
+        if create_article_form.is_valid():
+            title = create_article_form.cleaned_data.get("title")
+            author = create_article_form.cleaned_data.get("author")
+            content = create_article_form.cleaned_data.get("content")
             new_article = Article.objects.create(title=title, author=author, content=content)
             return redirect("article_view", pk=new_article.pk)
-        return render(request, "create.html", {"form": form})
+        return index_view_partial(request, create_article_form)
 
 
-def update_article(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    if request.method == "GET":
-        form = ArticleForm(initial={
-            "title": article.title,
-            "author": article.author,
-            "content": article.content
-        })
-        return render(request, "update.html", {"form": form})
-    else:
+class UpdateArticle(View):
+
+    def dispatch(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
+        self.article = get_object_or_404(Article, pk=pk)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        # pk = kwargs.get("pk")
+        # article = get_object_or_404(Article, pk=pk)
+        if request.method == "GET":
+            form = ArticleForm(initial={
+                "title": self.article.title,
+                "author": self.article.author,
+                "content": self.article.content
+            })
+            return render(request, "update.html", {"form": form})
+
+    def post(self, request, *args, **kwargs):
+        # pk = kwargs.get("pk")
+        # article = get_object_or_404(Article, pk=pk)
         form = ArticleForm(data=request.POST)
         if form.is_valid():
-            article.title = form.cleaned_data.get("title")
-            article.author = form.cleaned_data.get("author")
-            article.content = form.cleaned_data.get("content")
-            article.save()
-            return redirect("article_view", pk=article.pk)
+            self.article.title = form.cleaned_data.get("title")
+            self.article.author = form.cleaned_data.get("author")
+            self.article.content = form.cleaned_data.get("content")
+            self.article.save()
+            return redirect("article_view", pk=self.article.pk)
         return render(request, "update.html", {"form": form})
 
 

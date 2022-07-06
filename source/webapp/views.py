@@ -11,7 +11,7 @@ from django.views.generic import TemplateView, RedirectView
 class IndexView(View):
     def get(self, request, *args, **kwargs):
         create_article_form = ArticleForm()
-        return index_view_partial(request, create_article_form)
+        return index_view_partial(request, create_article_form, status=200)
 
 
 class MyRedirectView(RedirectView):
@@ -28,7 +28,7 @@ class ArticleView(TemplateView):
         return super().get_context_data(**kwargs)
 
 
-def index_view_partial(request, create_article_form):
+def index_view_partial(request, create_article_form, status):
     search_form = SearchForm(data=request.GET)
     articles = Article.objects.all()
     if search_form.is_valid():
@@ -36,7 +36,7 @@ def index_view_partial(request, create_article_form):
         articles = articles.filter(title__contains=search_value)
     articles = articles.order_by("-updated_at")
     context = {"articles": articles, "search_form": search_form, "create_article_form": create_article_form}
-    return render(request, "index.html", context)
+    return render(request, "index.html", context, status=status)
 
 
 def create_article(request):
@@ -48,7 +48,7 @@ def create_article(request):
             content = create_article_form.cleaned_data.get("content")
             new_article = Article.objects.create(title=title, author=author, content=content)
             return redirect("article_view", pk=new_article.pk)
-        return index_view_partial(request, create_article_form)
+        return index_view_partial(request, create_article_form, status=400)
 
 
 class UpdateArticle(View):

@@ -23,6 +23,9 @@
             <ul class="navbar-nav">
                 {% block nav %}
                 {% endblock %}
+                <li class="nav-item ">
+                    {% include "partial/search.html" with form=search_form %}
+                </li>
             </ul>
         </div>
     </div>

@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 {% load static %}
+{% load request_get_replace_page %}
 {% block nav %}
     <li class="nav-item">
         <a class="nav-link" href="{% url "create_article" %}">Создание статьи</a>
     </li>
 {% endblock %}
 {% block content %}
-    {% include "partial/search.html" %}
+
+    <a href="?{{ request|get_sort:"updated_at" }}">Сортировать по дате изменения</a>
+    <a href="?{{ request|get_sort:"title" }}">Сортировать по названиям</a>
+
     <h1>Статьи</h1>
     <div class="row">
         {% for article in articles %}
@@ -20,9 +24,9 @@
             </div>
         {% empty %}
         {% endfor %}
-    {% if is_paginated %}
-        {% include "partial/pagination.html" %}
-    {% endif %}
+        {% if is_paginated %}
+            {% include "partial/pagination.html" %}
+        {% endif %}
     </div>
 {% endblock %}
 

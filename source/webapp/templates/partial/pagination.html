@@ -1,15 +1,12 @@
+{% load request_get_replace_page %}
+
 <ul class="pagination mt-3">
     <li class="page-item">
-        <a class="page-link" href="?page=1{% if query %}&{{ query }}{% endif %}">Начало</a>
+        <a class="page-link" href="?{{ request|replace:1 }}">Начало</a>
     </li>
     {% if page_obj.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&{{ query }}{% endif %}">Previous</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link"
-               href="?page=
-                       {{ page_obj.previous_page_number }}{% if query %}&{{ query }}{% endif %}">{{ page_obj.previous_page_number }}</a>
+            <a class="page-link" href="?{{ request|replace:page_obj.previous_page_number }}">Previous</a>
         </li>
     {% else %}
         <li class="page-item disabled">
@@ -22,11 +19,13 @@
             <label for="page">
                 <input class="form-control" type="text" name="page" id="page" value="{{ page_obj.number }}">
             </label>
-            {% if  search%}
-            <label>
-                <input class="form-control" hidden type="text" name="search" value="{{ search }}">
-            </label>
-            {% endif %}
+            {% for key, value in request.GET.items %}
+                {% if key != "page" %}
+                    <label>
+                        <input class="form-control" hidden type="text" name="{{ key }}" value="{{ value }}">
+                    </label>
+                {% endif %}
+            {% endfor %}
             <button type="submit">Перейти</button>
         </form>
     </li>
@@ -34,12 +33,7 @@
     {% if page_obj.has_next %}
         <li class="page-item">
             <a class="page-link"
-               href="?page=
-                       {{ page_obj.next_page_number }}{% if query %}&{{ query }}{% endif %}">{{ page_obj.next_page_number }}</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link"
-               href="?page={{ page_obj.next_page_number }}{% if query %}&{{ query }}{% endif %}">Next</a>
+               href="?{{ request|replace:page_obj.next_page_number }}">Next</a>
         </li>
     {% else %}
         <li class="page-item disabled">
@@ -47,7 +41,7 @@
         </li>
     {% endif %}
     <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if query %}&{{ query }}{% endif %}">В
+        <a class="page-link" href="?{{ request|replace:page_obj.paginator.num_pages }}">В
             конец</a>
     </li>
 </ul>

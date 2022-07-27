@@ -4,7 +4,7 @@
         <a class="nav-link" href="{% url "create_article" %}">Создание статьи</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{% url "update_article" article.pk %}">Редактировать</a>
+        <a class="nav-link" href="{% url "update_article" article.slug %}">Редактировать</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{% url "article_comment_create" article.pk %}">Добавить коммент</a>
@@ -27,13 +27,16 @@
         {{ article.content }}
     </p>
     <h3>Комментарии</h3>
-    {% for comment in comments %}
+    {% for comment in page_obj.object_list %}
             <p>{{ comment.text }}</p>
-        <a href="{% url "update_comment" comment.pk %}">Изменить</a>
+        <a href="{% url "update_comment" article.pk comment.pk %}">Изменить</a>
         <a href="{% url "delete_comment" comment.pk %}">Удалить</a>
     {% empty %}
         <p>Комментариев нет</p>
     {% endfor %}
+    {% if page_obj.paginator.num_pages > 1 %}
+        {% include "partial/pagination.html" %}
+    {% endif %}
     <h3>Теги</h3>
     {% for tag in article.tags.all %}
             <p>{{ tag.name }}</p>

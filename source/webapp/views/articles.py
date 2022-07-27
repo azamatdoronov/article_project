@@ -1,48 +1,21 @@
-from django.db.models import Q
+from django.core.paginator import Paginator
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
-# Create your views here.
-from django.utils.http import urlencode
-
-from webapp.forms import ArticleForm, SearchForm, ArticleDeleteForm, UserArticleForm
+from webapp.forms import ArticleForm, ArticleDeleteForm, UserArticleForm
 from webapp.models import Article
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+
+from webapp.views import SearchView
 
 
-class IndexView(ListView):
+class IndexView(SearchView):
     model = Article
     template_name = "articles/index.html"
     context_object_name = "articles"
     ordering = "-updated_at"
     paginate_by = 5
-
-    def get(self, request, *args, **kwargs):
-        self.form = self.get_search_form()
-        self.search_value = self.get_search_value()
-        return super().get(request, *args, **kwargs)
-
-    def get_queryset(self):
-        if self.search_value:
-            return Article.objects.filter(
-                Q(author__icontains=self.search_value) | Q(title__icontains=self.search_value))
-        return Article.objects.all()
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        context["form"] = self.form
-        if self.search_value:
-            query = urlencode({'search': self.search_value})  # search=dcsdvsdvsd
-            context['query'] = query
-            context['search'] = self.search_value
-        return context
-
-    def get_search_form(self):
-        return SearchForm(self.request.GET)
-
-    def get_search_value(self):
-        if self.form.is_valid():
-            return self.form.cleaned_data.get("search")
+    search_fields = ["title__contains", "author__contains"]
 
 
 class ArticleView(DetailView):
@@ -51,7 +24,10 @@ class ArticleView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['comments'] = self.object.comments.order_by("-created_at")
+        paginator = Paginator(self.object.comments.order_by("-created_at"), 2)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context['page_obj'] = page_obj
         return context
 
 
@@ -83,9 +59,15 @@ class DeleteArticle(DeleteView):
     success_url = reverse_lazy('index')
     form_class = ArticleDeleteForm
 
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(data=request.POST, instance=self.get_object())
-        if form.is_valid():
-            return self.delete(request, *args, **kwargs)
-        else:
-            return self.get(request, *args, **kwargs)
+    # def post(self, request, *args, **kwargs):
+    #     form = self.form_class(data=request.POST, instance=self.get_object())
+    #     if form.is_valid():
+    #         return self.delete(request, *args, **kwargs)
+    #     else:
+    #         return self.get(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if self.request.method == "POST":
+            kwargs['instance'] = self.get_object()
+        return kwargs

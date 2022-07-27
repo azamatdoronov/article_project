@@ -1,6 +1,52 @@
+from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
+from django.utils.http import urlencode
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
+
+from webapp.forms import SearchForm
+
+
+class SearchView(ListView):
+    search_form_class = SearchForm
+    search_form_field = "search"
+    query_name = "query"
+    search_fields = []
+
+    def get(self, request, *args, **kwargs):
+        self.form = self.get_search_form()
+        self.search_value = self.get_search_value()
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        if self.search_value:
+            return self.model.objects.filter(self.get_query())
+        return self.model.objects.all()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context["form"] = self.form
+        if self.search_value:
+            query = urlencode({self.search_form_field: self.search_value})  # search=dcsdvsdvsd
+            context[self.query_name] = query
+            context[self.search_form_field] = self.search_value
+        return context
+
+    def get_search_form(self):
+        return self.search_form_class(self.request.GET)
+
+    def get_search_value(self):
+        if self.form.is_valid():
+            return self.form.cleaned_data.get(self.search_form_field)
+
+    def get_query(self):
+        query = Q()
+        for field in self.search_fields:  # title__contains
+            kwargs = {field: self.search_value}
+            print(kwargs)  # field__contains="Статья"
+            query = query | Q(**kwargs)  # title__contains="Статья"
+            print(query)    #Q(title__contains="Статья") | Q(author__contains="Статья")
+        return query
 
 
 class DeleteView(View):
@@ -37,48 +83,49 @@ class DeleteView(View):
     def get_redirect_url(self):
         return self.redirect_url
 
+
 class UpdateView(View):
-   form_class = None
-   template_name = None
-   redirect_url = ''
-   model = None
-   key_kwarg = 'pk'
-   context_key = 'object'
+    form_class = None
+    template_name = None
+    redirect_url = ''
+    model = None
+    key_kwarg = 'pk'
+    context_key = 'object'
 
-   def get(self, request, *args, **kwargs):
-       self.object = self.get_object()
-       form = self.form_class(instance=self.object)
-       context = self.get_context_data(form=form)
-       return render(request, self.template_name, context=context)
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.form_class(instance=self.object)
+        context = self.get_context_data(form=form)
+        return render(request, self.template_name, context=context)
 
-   def post(self, request, *args, **kwargs):
-       self.object = self.get_object()
-       form = self.form_class(instance=self.object, data=request.POST)
-       if form.is_valid():
-           return self.form_valid(form)
-       else:
-           return self.form_invalid(form)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.form_class(instance=self.object, data=request.POST)
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
-   def form_valid(self, form):
-       self.object = form.save()
-       return redirect(self.get_redirect_url())
+    def form_valid(self, form):
+        self.object = form.save()
+        return redirect(self.get_redirect_url())
 
-   def form_invalid(self, form):
-       context = self.get_context_data(form=form)
-       return render(self.request, self.template_name, context=context)
+    def form_invalid(self, form):
+        context = self.get_context_data(form=form)
+        return render(self.request, self.template_name, context=context)
 
-   def get_object(self):
-       pk = self.kwargs.get(self.key_kwarg)
-       return get_object_or_404(self.model, pk=pk)
+    def get_object(self):
+        pk = self.kwargs.get(self.key_kwarg)
+        return get_object_or_404(self.model, pk=pk)
 
-   def get_context_data(self, **my_kwargs):
-       context = self.kwargs.copy()
-       context[self.context_key] = self.object
-       context.update(my_kwargs)
-       return context
+    def get_context_data(self, **my_kwargs):
+        context = self.kwargs.copy()
+        context[self.context_key] = self.object
+        context.update(my_kwargs)
+        return context
 
-   def get_redirect_url(self):
-       return self.redirect_url
+    def get_redirect_url(self):
+        return self.redirect_url
 
 
 class CreateView(View):
@@ -109,6 +156,7 @@ class CreateView(View):
 
     def get_redirect_url(self):
         return self.redirect_url
+
 
 class DetailView(TemplateView):
     context_key = 'object'

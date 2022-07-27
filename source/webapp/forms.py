@@ -1,6 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import widgets
+from django.template.defaultfilters import slugify
+
 from webapp.models import Article, Comment
 
 
@@ -20,10 +22,19 @@ class ArticleForm(forms.ModelForm):
         }
 
     def clean(self):
-        if self.cleaned_data.get("title") == self.cleaned_data.get("content"):
+        cleaned_data = super().clean()
+        title = cleaned_data.get("title")
+        if title == cleaned_data.get("content"):
             raise ValidationError("Название и описание не могут совпадать")
-        return super().clean()
+        if Article.objects.filter(title=title).exists():
+            raise ValidationError("Статья с таким названием уже существует")
+        return cleaned_data
 
+    def save(self, commit=True):
+        article = super().save(False)
+        article.slug = slugify(article.title)
+        article.save()
+        return article
 
 class SearchForm(forms.Form):
     search = forms.CharField(max_length=50, required=False, label='Найти')

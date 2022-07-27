@@ -24,6 +24,7 @@ class UpdateComment(UpdateView):
     form_class = CommentForm
     template_name = "comments/update.html"
     model = Comment
+    pk_url_kwarg = "comment_pk"
 
     def get_success_url(self):
         return reverse("article_view", kwargs={"pk": self.object.article.pk})

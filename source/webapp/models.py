@@ -1,6 +1,7 @@
 from django.db import models
 
 # Create your models here.
+from django.template.defaultfilters import slugify
 from django.urls import reverse
 
 from webapp.validate import validate_title
@@ -15,11 +16,11 @@ class BaseModel(models.Model):
 
 
 class Article(BaseModel):
-    title = models.CharField(max_length=50, null=False, blank=False,
-                             verbose_name="Заголовок", validators=[validate_title])
+    title = models.CharField(max_length=50, null=False, blank=False, verbose_name="Заголовок")
     author = models.CharField(max_length=50, verbose_name="Автор", default="Unknown")
     content = models.TextField(max_length=3000, verbose_name="Контент")
     tags = models.ManyToManyField("webapp.Tag", related_name="articles", blank=True)
+    slug = models.SlugField(null=False, unique=True)
 
     def __str__(self):
         return f"{self.id}. {self.title}: {self.author}"
@@ -34,6 +35,11 @@ class Article(BaseModel):
         db_table = "articles"
         verbose_name = "Статья"
         verbose_name_plural = "Статьи"
+
+    # def save(self, *args, **kwargs):
+    #     if not self.slug:
+    #         self.slug = slugify(self.title)
+    #     return super().save(*args, **kwargs)
 
 
 class Comment(BaseModel):

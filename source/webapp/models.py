@@ -44,7 +44,9 @@ class Comment(BaseModel):
     text = models.TextField(max_length=400, verbose_name='Комментарий')
     author = models.ForeignKey(get_user_model(), related_name="comments", verbose_name="Автор", default=1,
                                on_delete=models.SET_DEFAULT)
-    article = models.ForeignKey("webapp.Article", on_delete=models.CASCADE, related_name="comments", verbose_name="Статья")
+    article = models.ForeignKey("webapp.Article", on_delete=models.CASCADE, related_name="comments",
+                                verbose_name="Статья")
+
     def __str__(self):
         return f"{self.id}. {self.text}: {self.author.username}"
 
@@ -64,3 +66,20 @@ class Tag(BaseModel):
         db_table = "tags"
         verbose_name = "Тэг"
         verbose_name_plural = "Тэги"
+
+
+class Project(BaseModel):
+    title = models.CharField(max_length=50, null=False, blank=False, verbose_name="Заголовок")
+    content = models.TextField(max_length=3000, verbose_name="Контент")
+    users = models.ManyToManyField(get_user_model(), related_name="projects", blank=True)
+    def __str__(self):
+        return f"{self.id}. {self.title}"
+
+
+    class Meta:
+        db_table = "projects"
+        verbose_name = "Проект"
+        verbose_name_plural = "Проекты"
+        permissions = [
+            ('add_users_in_project', 'Добавить юзеров в проект')
+        ]

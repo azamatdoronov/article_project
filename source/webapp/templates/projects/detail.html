@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block nav %}
+
+
+{% endblock %}
+
+{% block content %}
+    <div class="card mt-3">
+        <div class="card-body text-center">
+            <h5 class="card-title">{{ project.title }}</h5>
+
+            <p class="card-text">{{ project.content }}</p>
+        </div>
+    </div>
+    <h3 class="my-3 text-center">Юзеры</h3>
+    <div class="row">
+        {% for user in project.users.all %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p class="card-text">{{ user.username }}</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+        {% endfor %}
+    </div>
+
+{% endblock %}

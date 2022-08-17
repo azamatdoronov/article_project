@@ -1,7 +1,8 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.forms import widgets
-from webapp.models import Article, Comment
+from webapp.models import Article, Comment, Project
 
 
 class UserArticleForm(forms.ModelForm):
@@ -45,3 +46,22 @@ class ArticleDeleteForm(forms.ModelForm):
         if self.instance.title != title:
             raise ValidationError("Названия не совпадают")
         return title
+
+
+class ProjectCreateForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = ("title", "content")
+
+
+class ChangeUsersInProjectForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        pk = kwargs.pop("pk")
+        super().__init__(*args, **kwargs)
+        self.fields['users'].queryset = get_user_model().objects.exclude(pk=pk)
+
+    class Meta:
+        model = Project
+        fields = ("users",)
+        widgets = {"users": widgets.CheckboxSelectMultiple}

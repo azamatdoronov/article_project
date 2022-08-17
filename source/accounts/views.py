@@ -93,7 +93,7 @@ class ChangeProfileView(PermissionRequiredMixin, UpdateView):
         profile_form = self.profile_form_class(instance=self.object.profile,
                                                data=request.POST,
                                                files=request.FILES)
-        if form.is_valid():
+        if form.is_valid() and profile_form.is_valid():
             return self.form_valid(form, profile_form)
         else:
             return self.form_invalid(form, profile_form)

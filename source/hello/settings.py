@@ -23,11 +23,11 @@ env = environ.Env(
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = env.str("EMAIL_HOST")
-EMAIL_PORT = env.int("EMAIL_PORT", 587)
-EMAIL_HOST_USER = env.str("EMAIL_USER")
-EMAIL_HOST_PASSWORD = env.str("EMAIL_PASSWORD")
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = env.str("EMAIL_HOST")
+# EMAIL_PORT = env.int("EMAIL_PORT", 587)
+# EMAIL_HOST_USER = env.str("EMAIL_USER")
+# EMAIL_HOST_PASSWORD = env.str("EMAIL_PASSWORD")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -50,11 +50,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
 
     'webapp',
     'accounts',
     'api_v1',
     'api_v2',
+    'api_v3'
 ]
 
 MIDDLEWARE = [
@@ -117,6 +119,13 @@ DATABASES = {
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 LANGUAGE_CODE = 'en-us'
 

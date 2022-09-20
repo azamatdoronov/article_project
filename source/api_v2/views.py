@@ -24,6 +24,7 @@ class ArticleView(APIView):
         return Response(articles_data)
 
     def post(self, request, *args, **kwargs):
+        print(request.user)
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
